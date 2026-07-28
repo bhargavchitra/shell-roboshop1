@@ -13,6 +13,7 @@ C="\e[36m"
 W="\e[37m"
 N="\e[0m"
 SCRIPT_DIR=$PWD
+MONGODB_HOST=mongodb.bunnyone.online
 
 if [ $USERID -ne 0 ]; then
     echo -e "$R Please run this script as root user access $N" | tee -a $LOGS_FILE
@@ -74,7 +75,10 @@ systemctl enable catalogue &>>$LOGS_FILE
 systemctl start catalogue
 VALIDATE $? "Starting and enabling catalogue"
 
+cp $SCRIPT_DIR /mongo.repo /etc/yum.repos.d/mongo.repo
+dnf install mongodb-mongosh -y 
 
+mongosh --host $MONGODB_HOST </app/db/master-data.js
 
 
 
