@@ -23,7 +23,7 @@ do
             --query 'Reservations[].Instances[].PublicIpAddress' \
             --output text
         )
-        RECORD_NAME="$$DOMAIN_NAME" #bunnyone.online
+        RECORD_NAME="$DOMAIN_NAME" # bunnyone.online
         
     else
         IP=$(
@@ -32,10 +32,13 @@ do
             --query 'Reservations[].Instances[].PrivateIpAddress' \
             --output text
         )
-        RECORD_NAME="$instance.$DOMAIN_NAME" #mongodb.bunnyone.online
+        RECORD_NAME="$instance.$DOMAIN_NAME" # mongodb.bunnyone.onlin
     fi
 
     echo "IP Address: $IP"
+
+    #done
+    #sh 01-roboshop.sh mongodb 
 
     aws route53 change-resource-record-sets \
     --hosted-zone-id $ZONE_ID \
@@ -65,3 +68,5 @@ do
 
 
 done
+
+#sh 01-roboshop.sh mongodb catalogue 
