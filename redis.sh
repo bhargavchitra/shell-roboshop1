@@ -42,8 +42,6 @@ sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected -mode no' /et
 VALIDATE $? "Allowing remote connections" 
 
 systemctl enable redis &>>$LOGS_FILE
-VALIDATE $? " Enable REDIS"
-
 systemctl start redis 
-VALIDATE $? " start redis"
+VALIDATE $? "ensbled and  start redis"
 
