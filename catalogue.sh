@@ -1,6 +1,5 @@
 #!/bin/bash 
 
-
 USERID=$(id -u)
 LOGS_FOLDER="/var/log/shell-roboshop"
 LOGS_FILE="$LOGS_FOLDER/$0.log"
@@ -66,7 +65,7 @@ VALIDATE $? " Uzip catalogue code "
 npm install &>>$LOGS_FILE
 VALIDATE $? "Installing dependencies." 
 
-cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR /catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Created systemctl services"
 
 
@@ -75,12 +74,22 @@ systemctl enable catalogue &>>$LOGS_FILE
 systemctl start catalogue
 VALIDATE $? "Starting and enabling catalogue"
 
-cp $SCRIPT_DIR /mongo.repo /etc/yum.repos.d/mongo.repo
+cp $SCRIPT_DIR/catalogue.service /etc/yum.repos.d/catalogue.service
 dnf install mongodb-mongosh -y 
 
-mongosh --host $MONGODB_HOST --quiet --eval 'db.getMongo().getDBNames().indexof("mydb")'
-mongosh --host $MONGODB_HOST </app/db/master-data.js
+INDEX=$(mongosh --host $MONGODB_HOST --quiet --eval 'db.getMongo().getDBNames().indexof("mydb")')
+
+if [ $INDEX -le 0 ]; then 
+     mongosh --host $MONGODB_HOST </app/db/master-data.js
+     VALIDATE $? "loading products"
+else 
+    echo -e "Product already loaded ... $Y SKIPPING $N"
+fi 
+
+systemctl restart catalogue 
+VALIDATE $? "Restarting catalogue" 
 
 
 
+#sudo sh catalogue.sh
 
