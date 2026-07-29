@@ -46,7 +46,7 @@ fi
 mkdir -p /app
 VALIDATE "creating app directory"
 
-curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
+curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>$LOGS_FILE
 VALIDATE $? "Downloading catalogue code"
 
 cd /app 
@@ -55,11 +55,11 @@ VALIDATE $? "Moving to app directory"
 rm -rf /app/*
 VALIDATE $? "Removing existing code" 
 
-unzip /tmp/payment.zip
+unzip /tmp/payment.zip &>>$LOGS_FILE
 VALIDATE $? " Uzip catalogue code "
 
 cd /app 
-pip3 install -r requirements.txt
+pip3 install -r requirements.txt &>>$LOGS_FILE
 VALIDATE $? "installing dependencies"
 
 cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service
@@ -67,7 +67,7 @@ VALIDATE $? "Created systemctl services"
 
 
 systemctl daemon-reload
-systemctl enable payment 
+systemctl enable payment &>>$LOGS_FILE
 systemctl start payment
 VALIDATE $? "enabled and started payment" 
 
