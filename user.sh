@@ -64,9 +64,6 @@ VALIDATE $? "Removing existing code"
 unzip /tmp/user.zip &>>$LOGS_FILE
 VALIDATE $? " Uzip catalogue code "
 
-cd /app 
-VALIDATE $? "Moving to app directory"
-
 npm install &>>$LOGS_FILE
 VALIDATE $? "Installing dependencies." 
 
