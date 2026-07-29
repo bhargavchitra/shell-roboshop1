@@ -46,7 +46,7 @@ else
     echo -e "Roboshop cart already exist... $Y SKIPPING $N"
 fi 
 
-mkdir /app 
+mkdir -p /app 
 VALIDATE "creating app directory"
 
 curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip  &>>$LOGS_FILE
