@@ -65,7 +65,7 @@ VALIDATE $? " Uzip catalogue code "
 npm install &>>$LOGS_FILE
 VALIDATE $? "Installing dependencies." 
 
-cp $SCRIPT_DIR /catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Created systemctl services"
 
 
@@ -74,7 +74,7 @@ systemctl enable catalogue &>>$LOGS_FILE
 systemctl start catalogue
 VALIDATE $? "Starting and enabling catalogue"
 
-cp $SCRIPT_DIR/catalogue.service /etc/yum.repos.d/catalogue.service
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 dnf install mongodb-mongosh -y 
 
 INDEX=$(mongosh --host $MONGODB_HOST --quiet --eval 'db.getMongo().getDBNames().indexof("mydb")')
