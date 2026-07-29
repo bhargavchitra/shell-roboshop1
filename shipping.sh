@@ -67,15 +67,25 @@ VALIDATE $? "Installing and Renaming shipping"
 cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service
 VALIDATE $? "Created systemctl services"
 
-dnf install mysql -y 
+dnf install mysql -y &>>$LOGS_FILE
 VALIDATE $? "Installing MYSQL"
 
-mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql
-mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql 
-mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql
+ mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e 'use cities'
+ if [ $? -ne 0 ]; then 
 
-systemctl restart shipping
-systemctl enable shipping 
-systemctl start shipping
+   mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql
+   mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql 
+   mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql
+   VALIDATE $? "Loaded data into MYSQL"
+else 
+    echo -e "data is already loaded .../ $Y SKIPPING $N" 
+fi
+
+systemctl enable shipping &>>$LOGS_FILE
+systemctl start shipping 
 VALIDATE $? "Starting and enabling catalogue"
+
+
+
+
 
