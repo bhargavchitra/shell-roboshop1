@@ -46,11 +46,11 @@ VALIDATE $? "remove default content"
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
 cd /usr/share/nginx/html 
 unzip /tmp/frontend.zip
-VALIDATE $? "Downloaded and unzippe frontend"
+VALIDATE $? "Downloaded and unzip frontend"
 
 rm -rf /etc/nginx/nginx.conf
 
-cp $script_dir/nginx.conf /etc/nginx/nginx.conf
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
 VALIDATE $? "Copied our nginx xonf file"
 
 systemctl restart nginx 
