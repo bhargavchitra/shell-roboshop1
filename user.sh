@@ -12,7 +12,7 @@ C="\e[36m"
 W="\e[37m"
 N="\e[0m"
 SCRIPT_DIR=$PWD
-MONGODB_HOST=mongodb.bunnyone.online
+MONGODB_HOST=user.bunnyone.online
 
 if [ $USERID -ne 0 ]; then
     echo -e "$R Please run this script as root user access $N" | tee -a $LOGS_FILE
@@ -64,6 +64,9 @@ VALIDATE $? "Removing existing code"
 unzip /tmp/user.zip &>>$LOGS_FILE
 VALIDATE $? " Uzip catalogue code "
 
+cd /app 
+VALIDATE $? "Moving to app directory"
+
 npm install &>>$LOGS_FILE
 VALIDATE $? "Installing dependencies." 
 
@@ -74,16 +77,5 @@ systemctl daemon-reload
 systemctl enable user  &>>$LOGS_FILE
 systemctl start user
 VALIDATE $? "Starting and enabling user"
-
-
-
-
-
-
-
-
-
-
-
 
 
